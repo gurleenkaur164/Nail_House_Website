@@ -8,7 +8,7 @@ const services = [
     desc: "Long-lasting sculpted extensions with a flawless finish. Perfect for length and strength.",
     duration: "90 min",
     price: "₹1,200+",
-    imageSrc: "/services/gel-extensions.jpg",
+    imageSrc: "/services/gel-extensions.png",
     icon: "✦",
   },
   {
@@ -16,7 +16,7 @@ const services = [
     desc: "Classic acrylic application for durable, customisable nail enhancements.",
     duration: "75 min",
     price: "₹1,000+",
-    imageSrc: "/services/acrylic.jpg",
+    imageSrc: "/services/acrylic-nails.png",
     icon: "◈",
   },
   {
@@ -24,7 +24,7 @@ const services = [
     desc: "Hand-painted designs — florals, abstract, geometric, 3D — entirely bespoke.",
     duration: "60 min",
     price: "₹600+",
-    imageSrc: "/services/nail-art.jpg",
+    imageSrc: "/services/handpainted-nails.png",
     icon: "❋",
   },
   {
@@ -32,25 +32,10 @@ const services = [
     desc: "The timeless classic, redefined with modern shaping and gel topcoat.",
     duration: "45 min",
     price: "₹500+",
-    imageSrc: "/services/french.jpg",
+    imageSrc: "/services/french-nails.png",
     icon: "◇",
   },
-  {
-    name: "Chrome & Foil",
-    desc: "Mirror chrome powder or metallic foil for an ultra-sleek, editorial look.",
-    duration: "50 min",
-    price: "₹700+",
-    imageSrc: "/services/chrome.jpg",
-    icon: "◉",
-  },
-  {
-    name: "Ombre & Gradient",
-    desc: "Seamless colour blending — soft pastels to bold contrast fades.",
-    duration: "60 min",
-    price: "₹650+",
-    imageSrc: "/services/ombre.jpg",
-    icon: "⊕",
-  },
+  
 ];
 
 export default function ServicesSection() {
