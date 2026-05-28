@@ -292,7 +292,7 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Right — Form */}
+          
           <div className="contact-form">
             <div className="form-row">
               <div className="form-group">
@@ -360,7 +360,7 @@ export default function ContactSection() {
         </div>
 
         <div className="footer-strip">
-          © {new Date().getFullYear()} Pulisha Nail House · Handcrafted with care in Bengaluru
+          © {new Date().getFullYear()} Pulisha Nail House · Handcrafted with care in Amritsar
         </div>
       </section>
     </>
