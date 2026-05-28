@@ -258,8 +258,8 @@ export default function ContactSection() {
                 <div className="contact-icon">📍</div>
                 <span className="contact-item-text">
                   <span className="contact-item-label">Location</span>
-                  {/* Replace with her actual address */}
-                  Bengaluru, Karnataka, India
+                  
+                  Amritsar, Punjab, India
                 </span>
               </div>
 
@@ -267,8 +267,8 @@ export default function ContactSection() {
                 <div className="contact-icon">📞</div>
                 <span className="contact-item-text">
                   <span className="contact-item-label">Phone / WhatsApp</span>
-                  {/* Replace with her actual number */}
-                  <a href="https://wa.me/919999999999">+91 99999 99999</a>
+                  
+                  <a href="https://wa.me/919999999999">+91 70879 93372</a>
                 </span>
               </div>
 
@@ -276,8 +276,8 @@ export default function ContactSection() {
                 <div className="contact-icon">📸</div>
                 <span className="contact-item-text">
                   <span className="contact-item-label">Instagram</span>
-                  {/* Replace with her actual handle */}
-                  <a href="https://instagram.com/pulisha.nails" target="_blank" rel="noopener noreferrer">@pulisha.nails</a>
+                  
+                  <a href="https://instagram.com/nailsbypulisha" target="_blank" rel="noopener noreferrer">@nailsbypulisha</a>
                 </span>
               </div>
 
