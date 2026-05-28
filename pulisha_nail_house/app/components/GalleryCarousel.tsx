@@ -274,15 +274,13 @@ export default function GalleryCarousel() {
 
               return (
                 <div key={i} className={className} onClick={() => { if (timerRef.current) clearInterval(timerRef.current); setActive(i); startAutoPlay(); }}>
-                  {/* 
-                    REPLACE THIS PLACEHOLDER with:
-                    <Image src={slide.src} alt={slide.alt} fill style={{ objectFit: 'cover' }} />
-                    after you add your images to /public/gallery/
-                  */}
-                  <div className="slide-placeholder">
-                    <span className="slide-placeholder-icon">💅</span>
-                    <span className="slide-placeholder-text">{slide.label}</span>
-                  </div>
+                  
+                  <Image
+  src={slide.src}
+  alt={slide.alt}
+  fill
+  className="slide-image"
+/>
                   <div className="slide-label">{slide.label}</div>
                 </div>
               );
