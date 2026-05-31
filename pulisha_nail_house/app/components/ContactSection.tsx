@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function ContactSection() {
   const [form, setForm] = useState({ name: "", phone: "", service: "", message: "" });
@@ -9,13 +10,63 @@ export default function ContactSection() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Replace with your form submission logic (e.g. EmailJS, Formspree, WhatsApp link)
-    const wa = `https://wa.me/919999999999?text=Hi! I'm ${form.name}. I'd like to book: ${form.service}. ${form.message}`;
-    window.open(wa, "_blank");
+  const handleSubmit = async (e: React.MouseEvent) => {
+  e.preventDefault();
+
+  if (!form.name || !form.phone || !form.service) {
+    alert("Please fill all required fields");
+    return;
+  }
+
+  try {
+    const { error } = await supabase
+      .from("appointments")
+      .insert([
+        {
+          customer_name: form.name,
+          phone: form.phone,
+          service: form.service,
+          message: form.message,
+          status: "pending",
+        },
+      ]);
+
+    if (error) {
+  console.error("Supabase Error:", error);
+  alert(JSON.stringify(error));
+  return;
+}
+
+    const waMessage = encodeURIComponent(
+      `Hi! I'm ${form.name}
+
+Phone: ${form.phone}
+
+Service: ${form.service}
+
+Message:
+${form.message}`
+    );
+
+    window.open(
+      `https://wa.me/917087993372?text=${waMessage}`,
+      "_blank"
+    );
+
     setSent(true);
-  };
+
+    setForm({
+      name: "",
+      phone: "",
+      service: "",
+      message: "",
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  }
+};
 
   return (
     <>
