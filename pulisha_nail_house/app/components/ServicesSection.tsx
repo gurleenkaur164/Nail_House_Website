@@ -8,7 +8,7 @@ const services = [
     desc: "Long-lasting sculpted extensions with a flawless finish. Perfect for length and strength.",
     duration: "90 min",
     price: "₹1,200+",
-    imageSrc: "/services/gel-extensions.png",
+    imageSrc: "/services/gel-extensions.jpeg",
     icon: "✦",
   },
   {
@@ -24,7 +24,7 @@ const services = [
     desc: "Hand-painted designs — florals, abstract, geometric, 3D — entirely bespoke.",
     duration: "60 min",
     price: "₹600+",
-    imageSrc: "/services/handpainted-nails.png",
+    imageSrc: "/services/handpainted-nails.jpeg",
     icon: "❋",
   },
   {
@@ -223,16 +223,16 @@ export default function ServicesSection() {
           {services.map((svc, i) => (
             <div className="service-card" key={i}>
               <div className="card-image">
-                {/*
-                  REPLACE the placeholder below with:
-                  <Image src={svc.imageSrc} alt={svc.name} fill style={{ objectFit: 'cover' }} />
-                  once you add your images to /public/services/
-                */}
-                <div className="card-placeholder">
-                  <span className="placeholder-icon">{svc.icon}</span>
-                  <span className="placeholder-label">Add your photo</span>
-                </div>
-              </div>
+  <Image
+    src={svc.imageSrc}
+    alt={svc.name}
+    fill
+    sizes="(max-width: 768px) 100vw, 33vw"
+    style={{
+      objectFit: "cover",
+    }}
+  />
+</div>
               <div className="card-body">
                 <h3 className="card-name">{svc.name}</h3>
                 <p className="card-desc">{svc.desc}</p>
