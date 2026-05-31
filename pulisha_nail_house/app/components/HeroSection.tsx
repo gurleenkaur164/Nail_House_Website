@@ -160,12 +160,13 @@ export default function HeroSection() {
       <section className="hero">
         <div className="hero-decorative">nails</div>
         <div className="hero-content">
-          <p className="hero-eyebrow">Nail Artist · Bengaluru</p>
+          <p className="hero-eyebrow">Nail Artist · Amritsar</p>
           <h1 className="hero-title">
             Art at Your<br /><em>Fingertips</em>
           </h1>
           <p className="hero-subtitle">
-            Handcrafted nail artistry tailored to your style.<br />
+            Handcrafted nail artistry tailored to your style.
+            Experience of more than four years.<br />
             From classic elegance to bold statement sets — your nails, your story.
           </p>
           <div className="hero-buttons">
