@@ -319,7 +319,7 @@ ${form.message}`
                 <span className="contact-item-text">
                   <span className="contact-item-label">Phone / WhatsApp</span>
                   
-                  <a href="https://wa.me/919999999999">+91 70879 93372</a>
+                  <a href="https://wa.me/917087993372">+91 70879 93372</a>
                 </span>
               </div>
 
@@ -347,9 +347,10 @@ ${form.message}`
           <div className="contact-form">
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label">Your Name</label>
+                <label className="form-label" htmlFor="name">Your Name</label>
                 <input
                   className="form-input"
+                  id="name"
                   type="text"
                   name="name"
                   placeholder="Priya Sharma"
@@ -358,9 +359,10 @@ ${form.message}`
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Phone</label>
+                <label className="form-label" htmlFor="phone">Phone</label>
                 <input
                   className="form-input"
+                  id="phone"
                   type="tel"
                   name="phone"
                   placeholder="+91 98XXX XXXXX"
@@ -371,9 +373,10 @@ ${form.message}`
             </div>
 
             <div className="form-group">
-              <label className="form-label">Service Interested In</label>
+              <label className="form-label" htmlFor="service">Service Interested In</label>
               <select
                 className="form-select"
+                id="service"
                 name="service"
                 value={form.service}
                 onChange={handleChange}
@@ -390,9 +393,10 @@ ${form.message}`
             </div>
 
             <div className="form-group">
-              <label className="form-label">Message (optional)</label>
+              <label className="form-label" htmlFor="message">Message (optional)</label>
               <textarea
                 className="form-textarea"
+                id="message"
                 name="message"
                 placeholder="Any specific designs, preferred date/time…"
                 value={form.message}

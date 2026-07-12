@@ -35,7 +35,22 @@ const services = [
     imageSrc: "/services/french-nails.png",
     icon: "◇",
   },
-  
+  {
+    name: "Chrome & Foil",
+    desc: "High-shine mirror chrome and delicate foil accents for a bold, reflective finish.",
+    duration: "60 min",
+    price: "₹700+",
+    imageSrc: "/gallery/nails4.png",
+    icon: "✧",
+  },
+  {
+    name: "Ombre & Gradient",
+    desc: "Seamlessly blended colour fades — soft baby-boomer to vivid gradients, your choice.",
+    duration: "60 min",
+    price: "₹700+",
+    imageSrc: "/gallery/nails2.png",
+    icon: "❖",
+  },
 ];
 
 export default function ServicesSection() {
