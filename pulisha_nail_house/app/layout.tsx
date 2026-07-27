@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
+import {
+  SITE_URL,
+  PHONE_DISPLAY,
+  INSTAGRAM_HANDLE,
+  BUSINESS_HOURS,
+} from "@/lib/constants";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
+  weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jost = Jost({
   subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-jost",
+  display: "swap",
 });
-
-const siteUrl = "https://nail-house-website.vercel.app";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Pulisha Nail House · Nail Artist in Amritsar",
     template: "%s · Pulisha Nail House",
@@ -34,13 +43,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Pulisha Nail House" }],
   creator: "Pulisha Nail House",
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: siteUrl,
+    url: SITE_URL,
     siteName: "Pulisha Nail House",
     title: "Pulisha Nail House · Nail Artist in Amritsar",
     description:
@@ -61,13 +68,8 @@ export const metadata: Metadata = {
       "Handcrafted nail artistry in Amritsar — gel extensions, acrylics, bespoke nail art and more.",
     images: ["/gallery/nails1.png"],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  robots: { index: true, follow: true },
+  icons: { icon: "/favicon.svg" },
 };
 
 const jsonLd = {
@@ -76,9 +78,9 @@ const jsonLd = {
   name: "Pulisha Nail House",
   description:
     "Handcrafted nail artistry in Amritsar, Punjab — gel extensions, acrylic full sets, bespoke nail art, French manicures, chrome and ombre.",
-  image: `${siteUrl}/gallery/nails1.png`,
-  url: siteUrl,
-  telephone: "+91-70879-93372",
+  image: `${SITE_URL}/gallery/nails1.png`,
+  url: SITE_URL,
+  telephone: PHONE_DISPLAY,
   priceRange: "₹₹",
   address: {
     "@type": "PostalAddress",
@@ -86,22 +88,8 @@ const jsonLd = {
     addressRegion: "Punjab",
     addressCountry: "IN",
   },
-  sameAs: ["https://instagram.com/nailsbypulisha"],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ],
-      opens: "10:00",
-      closes: "19:00",
-    },
-  ],
+  sameAs: [`https://instagram.com/${INSTAGRAM_HANDLE}`],
+  openingHoursSpecification: BUSINESS_HOURS.structured,
 };
 
 export default function RootLayout({
@@ -112,7 +100,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script

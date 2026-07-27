@@ -1,423 +1,219 @@
 "use client";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import {
+  WHATSAPP_NUMBER,
+  PHONE_DISPLAY,
+  INSTAGRAM_HANDLE,
+  BUSINESS_HOURS,
+  SERVICE_OPTIONS,
+} from "@/lib/constants";
 
 export default function ContactSection() {
   const [form, setForm] = useState({ name: "", phone: "", service: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
-  const handleSubmit = async (e: React.MouseEvent) => {
-  e.preventDefault();
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = "Name is required";
+    if (!form.phone.trim()) errs.phone = "Phone number is required";
+    else if (!/^\+?[\d\s-]{7,20}$/.test(form.phone.trim())) errs.phone = "Enter a valid phone number";
+    if (!form.service) errs.service = "Please select a service";
+    return errs;
+  };
 
-  if (!form.name || !form.phone || !form.service) {
-    alert("Please fill all required fields");
-    return;
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  try {
-    const { error } = await supabase
-      .from("appointments")
-      .insert([
-        {
-          customer_name: form.name,
-          phone: form.phone,
-          service: form.service,
-          message: form.message,
-          status: "pending",
-        },
-      ]);
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
 
-    if (error) {
-  console.error("Supabase Error:", error);
-  alert(JSON.stringify(error));
-  return;
-}
+    setStatus("sending");
 
-    const waMessage = encodeURIComponent(
-      `Hi! I'm ${form.name}
+    try {
+      const res = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-Phone: ${form.phone}
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
 
-Service: ${form.service}
+      const waMessage = encodeURIComponent(
+        `Hi! I'm ${form.name.trim()}\n\nPhone: ${form.phone.trim()}\n\nService: ${form.service}\n\nMessage:\n${form.message.trim()}`
+      );
 
-Message:
-${form.message}`
-    );
+      window.open(
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`,
+        "_blank"
+      );
 
-    window.open(
-      `https://wa.me/917087993372?text=${waMessage}`,
-      "_blank"
-    );
+      setStatus("sent");
+      setForm({ name: "", phone: "", service: "", message: "" });
+    } catch {
+      setStatus("error");
+    }
+  };
 
-    setSent(true);
-
-    setForm({
-      name: "",
-      phone: "",
-      service: "",
-      message: "",
-    });
-
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong");
-  }
-};
+  const resetForm = () => {
+    setStatus("idle");
+    setErrors({});
+  };
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Jost:wght@300;400;500&display=swap');
+    <section className="contact-outer" id="contact">
+      <div className="contact-section">
+        <div className="contact-info-block">
+          <p className="section-eyebrow section-eyebrow--left">Get in Touch</p>
+          <h2 className="contact-title">
+            Let&apos;s create<br />something <em>beautiful</em>
+          </h2>
+          <p className="contact-desc">
+            Drop a message below or reach out directly via WhatsApp or Instagram to book your appointment. Walk-ins welcome based on availability.
+          </p>
 
-        .contact-section {
-          background: #3a2318;
-          padding: 100px 48px;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 80px;
-          align-items: start;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
+          <div className="contact-details">
+            <div className="contact-item">
+              <div className="contact-icon" aria-hidden="true">📍</div>
+              <span className="contact-item-text">
+                <span className="contact-item-label">Location</span>
+                Amritsar, Punjab, India
+              </span>
+            </div>
 
-        @media (max-width: 860px) {
-          .contact-section {
-            grid-template-columns: 1fr;
-            gap: 56px;
-            padding: 80px 24px;
-          }
-        }
+            <div className="contact-item">
+              <div className="contact-icon" aria-hidden="true">📞</div>
+              <span className="contact-item-text">
+                <span className="contact-item-label">Phone / WhatsApp</span>
+                <a href={`https://wa.me/${WHATSAPP_NUMBER}`}>{PHONE_DISPLAY}</a>
+              </span>
+            </div>
 
-        .contact-info-block { color: #fff8f5; }
+            <div className="contact-item">
+              <div className="contact-icon" aria-hidden="true">📸</div>
+              <span className="contact-item-text">
+                <span className="contact-item-label">Instagram</span>
+                <a href={`https://instagram.com/${INSTAGRAM_HANDLE}`} target="_blank" rel="noopener noreferrer">@{INSTAGRAM_HANDLE}</a>
+              </span>
+            </div>
 
-        .section-eyebrow {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.7rem;
-          letter-spacing: 0.3em;
-          text-transform: uppercase;
-          color: #c9a08b;
-          margin-bottom: 16px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .section-eyebrow::after {
-          content: '';
-          width: 36px;
-          height: 1px;
-          background: #c9a08b;
-        }
-
-        .contact-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(2.4rem, 5vw, 4rem);
-          font-weight: 300;
-          color: #fff8f5;
-          margin: 0 0 16px;
-          line-height: 1.1;
-        }
-
-        .contact-title em {
-          font-style: italic;
-          color: #c9a08b;
-        }
-
-        .contact-desc {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.88rem;
-          color: rgba(255,248,245,0.6);
-          line-height: 1.8;
-          margin: 0 0 40px;
-          font-weight: 300;
-        }
-
-        .contact-details {
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-        }
-
-        .contact-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 14px;
-        }
-
-        .contact-icon {
-          width: 36px;
-          height: 36px;
-          background: rgba(201,160,139,0.15);
-          border: 1px solid rgba(201,160,139,0.25);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.9rem;
-          flex-shrink: 0;
-        }
-
-        .contact-item-text {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.85rem;
-          color: rgba(255,248,245,0.8);
-          font-weight: 300;
-          line-height: 1.6;
-        }
-
-        .contact-item-label {
-          display: block;
-          font-size: 0.65rem;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: #c9a08b;
-          margin-bottom: 2px;
-        }
-
-        .contact-item-text a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .contact-item-text a:hover { color: #c9a08b; }
-
-        /* FORM */
-        .contact-form {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-
-        .form-label {
-          font-family: 'Jost', sans-serif;
-          font-size: 0.65rem;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: #c9a08b;
-        }
-
-        .form-input,
-        .form-select,
-        .form-textarea {
-          background: rgba(255,248,245,0.06);
-          border: 1px solid rgba(201,160,139,0.2);
-          color: #fff8f5;
-          font-family: 'Jost', sans-serif;
-          font-size: 0.85rem;
-          font-weight: 300;
-          padding: 12px 16px;
-          outline: none;
-          transition: border-color 0.3s;
-          width: 100%;
-          box-sizing: border-box;
-          border-radius: 0;
-        }
-
-        .form-select {
-          appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a08b'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 14px center;
-          cursor: pointer;
-        }
-
-        .form-select option { background: #3a2318; color: #fff8f5; }
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-          border-color: #c9a08b;
-        }
-
-        .form-textarea {
-          resize: vertical;
-          min-height: 100px;
-        }
-
-        .form-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 14px;
-        }
-
-        @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
-
-        .form-submit {
-          background: #c9a08b;
-          color: #fff;
-          font-family: 'Jost', sans-serif;
-          font-size: 0.75rem;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          padding: 15px 32px;
-          border: none;
-          cursor: pointer;
-          transition: background 0.3s, transform 0.2s;
-          margin-top: 4px;
-          align-self: flex-start;
-        }
-
-        .form-submit:hover {
-          background: #b8856d;
-          transform: translateY(-2px);
-        }
-
-        .success-msg {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 1.2rem;
-          font-style: italic;
-          color: #c9a08b;
-          margin-top: 8px;
-        }
-
-        /* Footer strip */
-        .footer-strip {
-          background: #2a180e;
-          text-align: center;
-          padding: 24px;
-          font-family: 'Jost', sans-serif;
-          font-size: 0.72rem;
-          color: rgba(255,248,245,0.35);
-          letter-spacing: 0.12em;
-        }
-      `}</style>
-
-      <section style={{ background: "#3a2318" }} id="contact">
-        <div className="contact-section">
-          {/* Left — Info */}
-          <div className="contact-info-block">
-            <p className="section-eyebrow">Get in Touch</p>
-            <h2 className="contact-title">
-              Let's create<br />something <em>beautiful</em>
-            </h2>
-            <p className="contact-desc">
-              Drop a message below or reach out directly via WhatsApp or Instagram to book your appointment. Walk-ins welcome based on availability.
-            </p>
-
-            <div className="contact-details">
-              <div className="contact-item">
-                <div className="contact-icon">📍</div>
-                <span className="contact-item-text">
-                  <span className="contact-item-label">Location</span>
-                  
-                  Amritsar, Punjab, India
-                </span>
-              </div>
-
-              <div className="contact-item">
-                <div className="contact-icon">📞</div>
-                <span className="contact-item-text">
-                  <span className="contact-item-label">Phone / WhatsApp</span>
-                  
-                  <a href="https://wa.me/917087993372">+91 70879 93372</a>
-                </span>
-              </div>
-
-              <div className="contact-item">
-                <div className="contact-icon">📸</div>
-                <span className="contact-item-text">
-                  <span className="contact-item-label">Instagram</span>
-                  
-                  <a href="https://instagram.com/nailsbypulisha" target="_blank" rel="noopener noreferrer">@nailsbypulisha</a>
-                </span>
-              </div>
-
-              <div className="contact-item">
-                <div className="contact-icon">🕐</div>
-                <span className="contact-item-text">
-                  <span className="contact-item-label">Hours</span>
-                  Mon – Sat: 10 AM – 7 PM<br />
-                  Sunday: By appointment only
-                </span>
-              </div>
+            <div className="contact-item">
+              <div className="contact-icon" aria-hidden="true">🕐</div>
+              <span className="contact-item-text">
+                <span className="contact-item-label">Hours</span>
+                {BUSINESS_HOURS.weekdays}<br />
+                {BUSINESS_HOURS.sunday}
+              </span>
             </div>
           </div>
+        </div>
 
-          
-          <div className="contact-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label" htmlFor="name">Your Name</label>
-                <input
-                  className="form-input"
-                  id="name"
-                  type="text"
-                  name="name"
-                  placeholder="Priya Sharma"
-                  value={form.name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="phone">Phone</label>
-                <input
-                  className="form-input"
-                  id="phone"
-                  type="tel"
-                  name="phone"
-                  placeholder="+91 98XXX XXXXX"
-                  value={form.phone}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
+        <form className="contact-form" onSubmit={handleSubmit} noValidate>
+          <div className="form-row">
             <div className="form-group">
-              <label className="form-label" htmlFor="service">Service Interested In</label>
-              <select
-                className="form-select"
-                id="service"
-                name="service"
-                value={form.service}
+              <label className="form-label" htmlFor="name">Your Name</label>
+              <input
+                className="form-input"
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Priya Sharma"
+                value={form.name}
                 onChange={handleChange}
-              >
-                <option value="">Select a service…</option>
-                <option>Gel Extensions</option>
-                <option>Acrylic Full Set</option>
-                <option>Nail Art</option>
-                <option>French Manicure</option>
-                <option>Chrome & Foil</option>
-                <option>Ombre & Gradient</option>
-                <option>Not sure yet</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="message">Message (optional)</label>
-              <textarea
-                className="form-textarea"
-                id="message"
-                name="message"
-                placeholder="Any specific designs, preferred date/time…"
-                value={form.message}
-                onChange={handleChange}
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? "name-error" : undefined}
               />
+              {errors.name && <p className="form-error" id="name-error">{errors.name}</p>}
             </div>
-
-            {!sent ? (
-              <button className="form-submit" onClick={handleSubmit}>
-                Send via WhatsApp →
-              </button>
-            ) : (
-              <p className="success-msg">Message sent! We'll get back to you shortly ✦</p>
-            )}
+            <div className="form-group">
+              <label className="form-label" htmlFor="phone">Phone</label>
+              <input
+                className="form-input"
+                id="phone"
+                type="tel"
+                name="phone"
+                placeholder="+91 98XXX XXXXX"
+                value={form.phone}
+                onChange={handleChange}
+                aria-invalid={!!errors.phone}
+                aria-describedby={errors.phone ? "phone-error" : undefined}
+              />
+              {errors.phone && <p className="form-error" id="phone-error">{errors.phone}</p>}
+            </div>
           </div>
-        </div>
 
-        <div className="footer-strip">
-          © {new Date().getFullYear()} Pulisha Nail House · Handcrafted with care in Amritsar
-        </div>
-      </section>
-    </>
+          <div className="form-group">
+            <label className="form-label" htmlFor="service">Service Interested In</label>
+            <select
+              className="form-select"
+              id="service"
+              name="service"
+              value={form.service}
+              onChange={handleChange}
+              aria-invalid={!!errors.service}
+              aria-describedby={errors.service ? "service-error" : undefined}
+            >
+              <option value="">Select a service…</option>
+              {SERVICE_OPTIONS.map((opt) => (
+                <option key={opt}>{opt}</option>
+              ))}
+            </select>
+            {errors.service && <p className="form-error" id="service-error">{errors.service}</p>}
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="message">Message (optional)</label>
+            <textarea
+              className="form-textarea"
+              id="message"
+              name="message"
+              placeholder="Any specific designs, preferred date/time…"
+              value={form.message}
+              onChange={handleChange}
+            />
+          </div>
+
+          {status === "sent" ? (
+            <div>
+              <p className="success-msg">Message sent! We&apos;ll get back to you shortly ✦</p>
+              <button type="button" className="form-submit" onClick={resetForm} style={{ marginTop: 12 }}>
+                Send Another Message
+              </button>
+            </div>
+          ) : (
+            <>
+              <button className="form-submit" type="submit" disabled={status === "sending"}>
+                {status === "sending" ? "Sending…" : "Send via WhatsApp →"}
+              </button>
+              {status === "error" && (
+                <p className="form-error">Something went wrong. Please try again.</p>
+              )}
+            </>
+          )}
+        </form>
+      </div>
+
+      <footer className="footer-strip">
+        © {new Date().getFullYear()} Pulisha Nail House · Handcrafted with care in Amritsar
+      </footer>
+    </section>
   );
 }

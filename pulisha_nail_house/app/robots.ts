@@ -1,13 +1,12 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/constants";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = "https://nail-house-website.vercel.app";
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/test",
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
