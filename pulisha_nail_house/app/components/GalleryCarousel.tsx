@@ -53,8 +53,36 @@ export default function GalleryCarousel() {
     else if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
   };
 
-  const togglePause = () => {
-    setPaused((p) => !p);
+  const getSlideStyle = (normalized: number): React.CSSProperties => {
+    const abs = Math.abs(normalized);
+    if (abs > 2) return { display: "none" };
+
+    const xOffset = normalized * 280;
+    const scale = abs === 0 ? 1 : abs === 1 ? 0.75 : 0.55;
+    const zTranslate = abs === 0 ? 0 : abs === 1 ? -120 : -220;
+    const rotateY = normalized * -8;
+    const opacity = abs === 0 ? 1 : abs === 1 ? 0.6 : 0.3;
+    const blur = abs === 0 ? 0 : abs === 1 ? 2 : 5;
+    const zIndex = 10 - abs;
+
+    return {
+      position: "absolute" as const,
+      left: "50%",
+      top: "50%",
+      width: "min(420px, 72vw)",
+      height: "min(520px, 65vw)",
+      borderRadius: "8px",
+      overflow: "hidden",
+      cursor: abs === 0 ? "default" : "pointer",
+      transform: `translate(-50%, -50%) translateX(${xOffset}px) translateZ(${zTranslate}px) rotateY(${rotateY}deg) scale(${scale})`,
+      opacity,
+      filter: blur > 0 ? `blur(${blur}px)` : "none",
+      zIndex,
+      transition: "all 0.6s cubic-bezier(0.4, 0, 0.15, 1)",
+      boxShadow: abs === 0
+        ? "0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,160,139,0.15)"
+        : "0 10px 30px rgba(0,0,0,0.3)",
+    };
   };
 
   return (
@@ -70,11 +98,12 @@ export default function GalleryCarousel() {
         tabIndex={0}
         role="group"
         aria-label="Gallery slides"
+        style={{ perspective: "1200px" }}
       >
         <button className="carousel-btn carousel-btn--prev" onClick={() => go(-1)} aria-label="Previous slide">&#8249;</button>
 
         <div
-          className="carousel-track"
+          className="carousel-track-3d"
           onMouseDown={(e) => onDragStart(e.clientX)}
           onMouseUp={(e) => onDragEnd(e.clientX)}
           onTouchStart={(e) => onDragStart(e.touches[0].clientX)}
@@ -85,30 +114,80 @@ export default function GalleryCarousel() {
             const diff = ((i - active + GALLERY_SLIDES.length) % GALLERY_SLIDES.length);
             const normalized = diff > GALLERY_SLIDES.length / 2 ? diff - GALLERY_SLIDES.length : diff;
 
-            let sizeClass = "carousel-slide--far";
-            if (normalized === 0) sizeClass = "carousel-slide--main";
-            else if (Math.abs(normalized) === 1) sizeClass = "carousel-slide--side";
-
             if (Math.abs(normalized) > 2) return null;
 
             return (
               <div
                 key={slide.src}
-                className={`carousel-slide ${sizeClass}`}
+                style={getSlideStyle(normalized)}
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${GALLERY_SLIDES.length}: ${slide.alt}`}
-                onClick={() => { clearTimer(); setActive(i); startAutoPlay(); }}
+                onClick={() => {
+                  if (normalized !== 0) {
+                    clearTimer();
+                    setActive(i);
+                    startAutoPlay();
+                  }
+                }}
               >
                 <Image
                   src={slide.src}
                   alt={slide.alt}
                   fill
-                  sizes="(max-width: 768px) 80vw, 480px"
-                  className="slide-image"
+                  sizes="(max-width: 768px) 72vw, 420px"
+                  style={{ objectFit: "cover" }}
                   priority={normalized === 0}
                 />
-                <div className="slide-label">{slide.label}</div>
+                <div
+                  className="slide-overlay"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: normalized === 0
+                      ? "linear-gradient(to top, rgba(26,16,8,0.7) 0%, transparent 50%)"
+                      : "rgba(26,16,8,0.15)",
+                    transition: "all 0.6s ease",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    padding: "24px",
+                    opacity: normalized === 0 ? 1 : 0,
+                    transform: normalized === 0 ? "translateY(0)" : "translateY(10px)",
+                    transition: "opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--font-jost), sans-serif",
+                      fontSize: "0.7rem",
+                      letterSpacing: "0.25em",
+                      textTransform: "uppercase",
+                      color: "#c9a08b",
+                      display: "block",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")} / {String(GALLERY_SLIDES.length).padStart(2, "0")}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-cormorant), serif",
+                      fontSize: "1.4rem",
+                      fontWeight: 300,
+                      fontStyle: "italic",
+                      color: "#fff8f5",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {slide.label}
+                  </span>
+                </div>
               </div>
             );
           })}
@@ -132,7 +211,7 @@ export default function GalleryCarousel() {
         </div>
         <button
           className="carousel-pause"
-          onClick={togglePause}
+          onClick={() => setPaused((p) => !p)}
           aria-label={paused ? "Play carousel" : "Pause carousel"}
         >
           {paused ? "▶" : "⏸"}
