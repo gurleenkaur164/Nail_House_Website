@@ -98,7 +98,6 @@ export default function GalleryCarousel() {
         tabIndex={0}
         role="group"
         aria-label="Gallery slides"
-        style={{ perspective: "1200px" }}
       >
         <button className="carousel-btn carousel-btn--prev" onClick={() => go(-1)} aria-label="Previous slide">&#8249;</button>
 

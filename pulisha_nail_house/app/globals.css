@@ -432,13 +432,15 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0 40px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
 .carousel-track-3d {
   position: relative;
   width: 100%;
   max-width: 1200px;
-  height: min(520px, 65vw);
+  height: min(560px, 70vw);
   margin: 0 auto;
   cursor: grab;
   user-select: none;
