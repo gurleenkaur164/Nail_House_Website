@@ -45,32 +45,23 @@ export default function ContactSection() {
 
     setStatus("sending");
 
-    try {
-      const res = await fetch("/api/appointments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+    const waMessage = encodeURIComponent(
+      `Hi! I'm ${form.name.trim()}\n\nPhone: ${form.phone.trim()}\n\nService: ${form.service}\n\nMessage:\n${form.message.trim()}`
+    );
 
-      if (!res.ok) {
-        setStatus("error");
-        return;
-      }
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`,
+      "_blank"
+    );
 
-      const waMessage = encodeURIComponent(
-        `Hi! I'm ${form.name.trim()}\n\nPhone: ${form.phone.trim()}\n\nService: ${form.service}\n\nMessage:\n${form.message.trim()}`
-      );
+    fetch("/api/appointments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    }).catch(() => {});
 
-      window.open(
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`,
-        "_blank"
-      );
-
-      setStatus("sent");
-      setForm({ name: "", phone: "", service: "", message: "" });
-    } catch {
-      setStatus("error");
-    }
+    setStatus("sent");
+    setForm({ name: "", phone: "", service: "", message: "" });
   };
 
   const resetForm = () => {
