@@ -125,7 +125,6 @@ export default function NailTryOn() {
               hidden
             />
             <div className="tryon-upload-inner">
-              <span className="tryon-upload-icon">&#9997;</span>
               <span className="tryon-upload-text">Upload Hand Photo</span>
               <span className="tryon-upload-hint">
                 JPG, PNG &mdash; any angle works
