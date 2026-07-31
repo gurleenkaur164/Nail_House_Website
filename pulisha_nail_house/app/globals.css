@@ -646,6 +646,208 @@ a {
   color: #c9a08b;
 }
 
+/* ===== NAIL TRY-ON ===== */
+
+.tryon-section {
+  background: #1a1008;
+  padding: 100px 48px;
+}
+
+.tryon-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.tryon-title {
+  font-family: var(--font-cormorant), serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 300;
+  color: #fff8f5;
+  margin: 0 0 16px;
+  font-style: italic;
+}
+
+.tryon-subtitle {
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255,248,245,0.55);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  max-width: 460px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.tryon-section .section-eyebrow {
+  color: #c9a08b;
+}
+
+.tryon-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tryon-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(201,160,139,0.3);
+  padding: 80px 40px;
+  cursor: pointer;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.tryon-upload:hover {
+  border-color: rgba(201,160,139,0.6);
+  background: rgba(201,160,139,0.05);
+}
+
+.tryon-upload-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.tryon-upload-icon {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tryon-upload-text {
+  font-family: var(--font-cormorant), serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #fff8f5;
+}
+
+.tryon-upload-hint {
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255,248,245,0.4);
+  letter-spacing: 0.1em;
+}
+
+.tryon-preview {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .tryon-preview { grid-template-columns: 1fr; gap: 32px; }
+  .tryon-section { padding: 80px 24px; }
+}
+
+.tryon-canvas-wrap {
+  position: relative;
+  background: rgba(255,248,245,0.04);
+  border: 1px solid rgba(201,160,139,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.tryon-canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tryon-demo-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c9a08b;
+  background: rgba(26,16,8,0.85);
+  padding: 4px 10px;
+  border: 1px solid rgba(201,160,139,0.25);
+}
+
+.tryon-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.tryon-controls-label {
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c9a08b;
+  margin: 0 0 10px;
+}
+
+.tryon-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.tryon-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+  padding: 0;
+}
+
+.tryon-swatch:hover { transform: scale(1.15); }
+
+.tryon-swatch--active {
+  border-color: #fff8f5;
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(201,160,139,0.4);
+}
+
+.tryon-color-name {
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.78rem;
+  color: rgba(255,248,245,0.7);
+  margin: 10px 0 0;
+  font-weight: 300;
+  text-align: center;
+}
+
+.tryon-slider {
+  width: 100%;
+  accent-color: #c9a08b;
+  cursor: pointer;
+}
+
+.tryon-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.tryon-actions .btn-outline {
+  color: #c9a08b;
+  border-color: rgba(201,160,139,0.4);
+  padding: 10px 20px;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.tryon-actions .btn-outline:hover {
+  background: #c9a08b;
+  color: #fff;
+}
+
+.tryon-reupload {
+  cursor: pointer;
+}
+
 /* ===== TESTIMONIALS ===== */
 
 .testimonials-section {

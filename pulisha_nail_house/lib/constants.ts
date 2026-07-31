@@ -28,6 +28,7 @@ export const BUSINESS_HOURS = {
 export const NAV_LINKS = [
   { href: "#gallery", label: "Gallery" },
   { href: "#services", label: "Services" },
+  { href: "#try-on", label: "Try On" },
   { href: "#contact", label: "Contact" },
 ];
 
