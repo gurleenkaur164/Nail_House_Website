@@ -848,6 +848,51 @@ a {
   cursor: pointer;
 }
 
+.tryon-step-info {
+  margin-bottom: 4px;
+}
+
+.tryon-step-desc {
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.82rem;
+  color: rgba(255,248,245,0.6);
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.tryon-brush-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tryon-brush-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(201,160,139,0.4);
+  overflow: hidden;
+}
+
+.tryon-toggle-btn {
+  flex: 1;
+  font-family: var(--font-jost), sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: rgba(255,248,245,0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tryon-toggle-btn--active {
+  background: #c9a08b;
+  color: #fff;
+}
+
 /* ===== TESTIMONIALS ===== */
 
 .testimonials-section {
