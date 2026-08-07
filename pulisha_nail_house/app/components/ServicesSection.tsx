@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SERVICES } from "@/lib/constants";
+import TiltCard from "./TiltCard";
 
 export default function ServicesSection() {
   return (
@@ -12,7 +13,7 @@ export default function ServicesSection() {
 
       <div className="services-grid">
         {SERVICES.map((svc) => (
-          <div className="service-card" key={svc.name}>
+          <TiltCard className="service-card" key={svc.name}>
             <div className="card-image">
               <Image
                 src={svc.imageSrc}
@@ -30,7 +31,7 @@ export default function ServicesSection() {
                 <span className="card-price">{svc.price}</span>
               </div>
             </div>
-          </div>
+          </TiltCard>
         ))}
       </div>
     </section>

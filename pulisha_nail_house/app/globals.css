@@ -299,6 +299,8 @@ a {
   position: relative;
   overflow: hidden;
   padding: 0 24px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .hero::before {
@@ -330,6 +332,7 @@ a {
   max-width: 720px;
   z-index: 1;
   animation: fadeUp 1s ease both;
+  transform-style: preserve-3d;
 }
 
 @keyframes fadeUp {
@@ -397,10 +400,78 @@ a {
   color: rgba(201,160,139,0.06);
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotateX(12deg) rotateY(-6deg);
   pointer-events: none;
   white-space: nowrap;
   letter-spacing: -0.04em;
+  transform-style: preserve-3d;
+  animation: heroFloat 8s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translate(-50%, -50%) rotateX(12deg) rotateY(-6deg) translateZ(0); }
+  25%      { transform: translate(-50%, -52%) rotateX(8deg) rotateY(4deg) translateZ(30px); }
+  50%      { transform: translate(-50%, -48%) rotateX(-4deg) rotateY(-8deg) translateZ(50px); }
+  75%      { transform: translate(-50%, -51%) rotateX(6deg) rotateY(6deg) translateZ(20px); }
+}
+
+.hero::before {
+  animation: orbFloat1 10s ease-in-out infinite;
+}
+
+.hero::after {
+  animation: orbFloat2 12s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translateZ(0) scale(1); }
+  50%      { transform: translateZ(60px) scale(1.1); }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% { transform: translateZ(0) scale(1); }
+  50%      { transform: translateZ(40px) scale(1.08); }
+}
+
+/* hero depth rings */
+.hero-depth-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201,160,139,0.08);
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.hero-depth-ring--1 {
+  width: 600px; height: 600px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateZ(-80px)
+    translate(calc(var(--mx, 0) * -30px), calc(var(--my, 0) * -30px));
+  animation: ringPulse 6s ease-in-out infinite;
+  transition: transform 0.6s ease-out;
+}
+
+.hero-depth-ring--2 {
+  width: 420px; height: 420px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateZ(-40px)
+    translate(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -18px));
+  animation: ringPulse 6s ease-in-out 1s infinite;
+  transition: transform 0.5s ease-out;
+}
+
+.hero-depth-ring--3 {
+  width: 240px; height: 240px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateZ(-10px)
+    translate(calc(var(--mx, 0) * -8px), calc(var(--my, 0) * -8px));
+  animation: ringPulse 6s ease-in-out 2s infinite;
+  transition: transform 0.4s ease-out;
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
 }
 
 /* ===== GALLERY ===== */
@@ -560,6 +631,7 @@ a {
   gap: 24px;
   max-width: 1100px;
   margin: 0 auto;
+  perspective: 900px;
 }
 
 @media (max-width: 900px) {
@@ -575,13 +647,17 @@ a {
   background: #fff;
   border: 1px solid rgba(201,160,139,0.15);
   overflow: hidden;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s;
   cursor: default;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 48px rgba(58,35,24,0.1);
+  transform: rotateY(-4deg) rotateX(3deg) translateY(-8px) scale(1.02);
+  box-shadow:
+    12px 16px 40px rgba(58,35,24,0.12),
+    -4px -4px 20px rgba(201,160,139,0.08);
 }
 
 .card-image {
@@ -919,6 +995,7 @@ a {
   gap: 24px;
   max-width: 1100px;
   margin: 0 auto;
+  perspective: 1200px;
 }
 
 @media (max-width: 900px) {
@@ -932,6 +1009,24 @@ a {
   padding: 36px 32px;
   display: flex;
   flex-direction: column;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.5s;
+}
+
+.testimonial-card:hover {
+  transform: rotateX(4deg) rotateY(3deg) translateZ(16px);
+  box-shadow:
+    0 24px 48px rgba(58,35,24,0.1),
+    0 0 0 1px rgba(201,160,139,0.2);
+}
+
+.testimonial-mark {
+  transform: translateZ(24px);
+  transition: transform 0.5s;
+}
+
+.testimonial-card:hover .testimonial-mark {
+  transform: translateZ(40px);
 }
 
 .testimonial-mark {
